@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'musics',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Add for temple folder
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'templates/static/').replace('\\', '/')
+]
