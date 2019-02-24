@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    {% include 'index/include.html' %}
+</head>
+<body>
+    <!-- navbar -->
+    {% include 'index/navbar.html' %}
+    <!-- content -->
+    {% block content %}
+    (content)
+    {% endblock %}
+    <!-- footer -->
+    {% include 'index/footer.html' %}
+
+</body>
+</html>
