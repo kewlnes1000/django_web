@@ -4,8 +4,7 @@ from main.models import Article
 
 
 def index(request):
-    Article.objects.all()
+    Articles = Article.objects.all()
     return render(request, 'index/index.html', {
-        'data': "Hello Django ",
-        'Articles': Article,
+        'Articles': Articles,
     })

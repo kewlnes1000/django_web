@@ -3,53 +3,30 @@
 
 {% block content %}
 <div class="container">
-    <div class="card-deck mb-3 text-center">
-        <div class="card mb-4 shadow-sm">
-            <img class="card-img-top" src="{% static 'images/png.svg' %}" alt="Card image cap">
-            <!-- <div class="card-header"> -->
-                <!-- </div> -->
-            <div class="card-body">
-                <h4 class="my-0 font-weight-normal">Week1</h4>
-                <ul class="list-unstyled mt-3 mb-4">
-                    <li>10 users included</li>
-                    <li>2 GB of storage</li>
-                    <li>Email support</li>
-                    <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-md btn-block btn-outline-primary">Sign up for free</button>
-            </div>
-        </div>
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Week2</h4>
-            </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                <li>20 users included</li>
-                <li>10 GB of storage</li>
-                <li>Priority email support</li>
-                <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
-            </div>
-        </div>
+    {% for Article in Articles %}
+        {% if forloop.counter0|divisibleby:3 %}
+        <div class="card-deck mb-3 text-center">
+        {% endif %}
             <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Week3</h4>
+                <img class="card-img-top" src="{% static 'images/png.svg' %}" alt="Card image cap">
+                <!-- <div class="card-header"> -->
+                    <!-- </div> -->
+                <div class="card-body">
+                    <h4 class="my-0 font-weight-normal">{{ Article.title }}</h4>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{ Article.tag1 }}</li>
+                        <li>{{ Article.tag2 }}</li>
+                        <li>{{ Article.tag3 }}</li>
+                        <li>{{ Article.tag4 }}</li>
+                    </ul>
+                    <button type="button" class="btn btn-md btn-block btn-outline-primary">點擊查看</button>
+                </div>
             </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                <li>30 users included</li>
-                <li>15 GB of storage</li>
-                <li>Phone and email support</li>
-                <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-            </div>
+            
+        {% if forloop.counter|divisibleby:3 %}
         </div>
-    </div>
+        {% endif %}
+    {% endfor %}
 </div>
 
 {% endblock %}
