@@ -13,3 +13,8 @@ class Article(models.Model):
     tag4 = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     uri = models.TextField(blank=True)
+
+class Lists(models.Model):
+    title = models.CharField(max_length=100)
+    tags = models.CharField(max_length=100)   
+    created_at = models.DateTimeField(auto_now=True)

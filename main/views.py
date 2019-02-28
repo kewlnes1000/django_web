@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from main.models import Article
+from main.models import Lists
 # Create your views here.
 
 
 def index(request):
-    Articles = Article.objects.all()
     return render(request, 'index/index.html', {
-        'Articles': Articles,
+        'Articles': Article.objects.all(),
+    })
+
+def week1(request):
+    return render(request, 'week1/index.html', {
+        'Lists': Lists.objects.all(),
     })

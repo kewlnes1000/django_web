@@ -1,0 +1,35 @@
+{% extends 'index/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+body {
+	background: rgba(44, 62, 80, .8);
+}
+footer{
+    color: #fff;
+}
+</style>
+<div class="container text-center">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="key in" aria-label="key in" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-dark" type="button">Add</button>
+        </div>
+    </div>
+              
+              
+    <div>
+        <ul class="list-group">
+            {% for List in Lists %}
+            <li class="list-group-item d-flex">
+                <h5 class="col-10">{{ List.title }}<span class="badge badge-pill badge-secondary  ml-md-1">New</span></h5>
+                <button type="button" class="btn btn-danger btn-sm mr-md-1 justify-content-end">Del</button>
+                <button type="button" class="btn btn-success btn-sm mr-md-1 justify-content-end">Finsh</button>
+            </li>
+            {% endfor %}
+          </ul>
+    </div>
+</div>
+
+{% endblock %}
