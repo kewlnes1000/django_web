@@ -18,17 +18,24 @@ footer{
         <input id="list_input" type="text" class="form-control" placeholder="key in" aria-label="key in" aria-describedby="basic-addon2">
         <div class="input-group-append">
             <button id="list_add" class="btn btn-dark" type="button">Add</button>
+            <a href="{% url 'del_completed' %}" role="button" class="btn btn-danger">Del Completed</a>
         </div>
     </div>
-              
-              
+    
+    
     <div>
         <ul class="list-group">
+            {% now "Ymd" as today %}
             {% for List in Lists %}
             <li class="list-group-item d-flex {% if List.completed == True %}completed{% endif %}">
-                <h5 class="col-10">{{ List.title }}<span class="badge badge-pill badge-secondary  ml-md-1">New</span></h5>
-                <button id="list_del" type="button" class="btn btn-danger btn-sm mr-md-1 justify-content-end">Del</button>
-                <button id="list_finsh" type="button" class="btn btn-success btn-sm mr-md-1 justify-content-end" {% if List.completed == True %}disabled{% endif %}>Finsh</button>
+                <h5 class="col-10 col-md-11">{{ List.title }}
+                    {% if List.created_at|date:'Ymd' == today  %}
+                        {% if List.completed == False  %}
+                        <span class="badge badge-pill badge-info ml-2">New</span>
+                        {% endif %}
+                    {% endif %}
+                </h5>
+                <a href="{% url 'list_finsh' List.id %}" role="button"  class="btn btn-success btn-sm justify-content-end {% if List.completed == True %}disabled" aria-disabled="true"{% else %}"{% endif %}>Finsh</a>
             </li>
             {% endfor %}
           </ul>
@@ -37,12 +44,6 @@ footer{
 
 <script>
 $(document).ready(function () {
-    // 監聽finsh事件
-    $('.list-group-item').on('click','#list_finsh',function () {
-        $(this).parent().addClass('completed')
-        $(this).prop('disabled', true);
-    })
-
     //監聽add事件
     $('#list_input').on('keydown',function (e) {        
         if (e.which == 13) {
@@ -53,12 +54,6 @@ $(document).ready(function () {
     $('#list_add').on('click',function () {
         test = $('#list_input').val()
         post_add(test)
-    })
-
-    //監聽del事件
-    $('#list_del').on('click',function () {
-        console.log(this);
-        
     })
 
     //django 在ajax上設置token 
@@ -77,7 +72,7 @@ $(document).ready(function () {
 
     //add ajax func
     function post_add(text) {
-        if(text.match(/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/)){
+        if(text.match(/^[a-zA-Z0-9\u4e00-\u9fa5\s]+$/)){
             $.ajax({
                 type: 'POST',
                 url: '/list_add',
@@ -89,8 +84,23 @@ $(document).ready(function () {
                     if (res.state) {
                         window.location = '/week1'
                     }
-                    
                 }
+            });
+        }else{
+            alert('請勿輸入特殊字元!')
+        }
+    }
+
+    //finsh ajax func
+    function post_finsh(id) {
+        if(text.match(/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/)){
+            $.ajax({
+                type: 'POST',
+                url: '/list_finsh',
+                dataType:'json',
+                data: {
+                    id:id,
+                },
             });
         }else{
             alert('請勿輸入特殊字元!')

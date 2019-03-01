@@ -22,4 +22,6 @@ urlpatterns = [
     path('', views.index),
     path('week1', views.week1),
     path('list_add', views.list_add, name='list_add'),
+    path('list_finsh/<list_id>', views.list_finsh, name='list_finsh'),
+    path('del_completed', views.del_completed, name='del_completed'),
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
+from django.shortcuts import redirect
+from django.views.decorators.http import require_POST,require_GET
 from django.http import JsonResponse
 from main.models import Article
 from main.models import Lists
@@ -24,3 +25,14 @@ def list_add(request):
 
     return JsonResponse({'state':True})
         
+@require_GET
+def list_finsh(request, list_id):
+    List = Lists.objects.get(pk=list_id)
+    List.completed = True
+    List.save()
+    return redirect('/week1')
+
+@require_GET
+def del_completed(request):
+    Lists.objects.filter(completed=True).delete()
+    return redirect('/week1')
