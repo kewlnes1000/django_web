@@ -17,4 +17,5 @@ class Article(models.Model):
 class Lists(models.Model):
     title = models.CharField(max_length=100)
     tags = models.CharField(max_length=100)   
+    completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)

@@ -9,12 +9,15 @@ body {
 footer{
     color: #fff;
 }
+.completed h5{
+    text-decoration:line-through;
+}
 </style>
 <div class="container text-center">
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="key in" aria-label="key in" aria-describedby="basic-addon2">
+        <input id="list_input" type="text" class="form-control" placeholder="key in" aria-label="key in" aria-describedby="basic-addon2">
         <div class="input-group-append">
-            <button class="btn btn-dark" type="button">Add</button>
+            <button id="list_add" class="btn btn-dark" type="button">Add</button>
         </div>
     </div>
               
@@ -22,14 +25,79 @@ footer{
     <div>
         <ul class="list-group">
             {% for List in Lists %}
-            <li class="list-group-item d-flex">
+            <li class="list-group-item d-flex {% if List.completed == True %}completed{% endif %}">
                 <h5 class="col-10">{{ List.title }}<span class="badge badge-pill badge-secondary  ml-md-1">New</span></h5>
-                <button type="button" class="btn btn-danger btn-sm mr-md-1 justify-content-end">Del</button>
-                <button type="button" class="btn btn-success btn-sm mr-md-1 justify-content-end">Finsh</button>
+                <button id="list_del" type="button" class="btn btn-danger btn-sm mr-md-1 justify-content-end">Del</button>
+                <button id="list_finsh" type="button" class="btn btn-success btn-sm mr-md-1 justify-content-end" {% if List.completed == True %}disabled{% endif %}>Finsh</button>
             </li>
             {% endfor %}
           </ul>
     </div>
 </div>
+
+<script>
+$(document).ready(function () {
+    // 監聽finsh事件
+    $('.list-group-item').on('click','#list_finsh',function () {
+        $(this).parent().addClass('completed')
+        $(this).prop('disabled', true);
+    })
+
+    //監聽add事件
+    $('#list_input').on('keydown',function (e) {        
+        if (e.which == 13) {
+            test = $('#list_input').val()
+            post_add(test)
+        }        
+    })
+    $('#list_add').on('click',function () {
+        test = $('#list_input').val()
+        post_add(test)
+    })
+
+    //監聽del事件
+    $('#list_del').on('click',function () {
+        console.log(this);
+        
+    })
+
+    //django 在ajax上設置token 
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection        
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            var csrftoken = Cookies.get('csrftoken');
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    })
+
+    //add ajax func
+    function post_add(text) {
+        if(text.match(/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/)){
+            $.ajax({
+                type: 'POST',
+                url: '/list_add',
+                dataType:'json',
+                data: {
+                    text:text,
+                },
+                success: function (res) {
+                    if (res.state) {
+                        window.location = '/week1'
+                    }
+                    
+                }
+            });
+        }else{
+            alert('請勿輸入特殊字元!')
+        }
+    }
+})
+
+</script>
 
 {% endblock %}

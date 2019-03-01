@@ -18,7 +18,8 @@ from django.urls import path
 from main import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', views.index),
-    path('week1/', views.week1),
+    path('week1', views.week1),
+    path('list_add', views.list_add, name='list_add'),
 ]
