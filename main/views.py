@@ -19,7 +19,6 @@ def week1(request):
 
 @require_POST
 def list_add(request):
-    print(request.POST['text'])
     new_list = Lists(title=request.POST['text'])
     new_list.save()
 
