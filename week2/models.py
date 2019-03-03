@@ -7,3 +7,6 @@ class Messages(models.Model):
     text = models.TextField(blank=True)
     to = models.EmailField(max_length=254)
     sent = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.subject
