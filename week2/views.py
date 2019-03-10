@@ -35,6 +35,7 @@ class MessagesViewSet(viewsets.ModelViewSet):
                 "to": [to],
                 "subject": subject,
                 "text": text})
+        print(response)
         if response.ok:
             message = Messages.objects.create(subject=subject, text=text, to=to, sent=True)
         else:
