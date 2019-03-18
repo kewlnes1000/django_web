@@ -65,7 +65,6 @@ SPIDER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'scrapy.pipelines.files.FilesPipeline': 1,
    'PTTspider.pipelines.PttspiderPipeline': 1,
 }
 

@@ -8,6 +8,13 @@ def isImageFormat(link):
        return True
     return False
 
+#移除特殊字元（移除Linux上無法作為資料夾的字元）
+def remove(value, deletechars):
+    for c in deletechars:
+        value = value.replace(c,'')
+    return value.rstrip()
+
+
 class BeautySpider(scrapy.Spider):
     name = 'Beauty'
     count_page = 1
@@ -38,6 +45,7 @@ class BeautySpider(scrapy.Spider):
         item = response.meta['item']
         imgurls = []
         item['date'] = response.css('div.article-metaline > span.article-meta-value::text')[2].extract()
+        item['title'] = remove(item['title'], "\/:*?'<>.;&!|`{}")
         for img in response.css('a::attr("href")'):
             url = img.extract()
             if(isImageFormat(url)):

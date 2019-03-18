@@ -12,31 +12,24 @@ from scrapy.pipelines.files import FilesPipeline
 
 class PttspiderPipeline(FilesPipeline):
     def get_media_requests(self, item, info):
-        print('in get_media_requests')
-        print(item)
         for file_url in item['file_urls']:
             yield scrapy.Request(file_url, meta = {'item': item})
+
+    def file_path(self, request, response = None, info = None):
+        item = request.meta['item']
+        #取得網址最後一個字串做為檔名
+        name = request.url.split('/')[-1]
+
+        return "%s/%s"%(item['title'], name)
     
     def item_completed(self, results, item, info):
         print('in item_completed')
+        file_paths = results[0][1].get("path")
+        print(file_paths)
         print(item)
-        print(results)
-        file_paths = [x['path'] for ok, x in results if ok]
         if not file_paths:
             raise DropItem("Item contains no files")
-        # item['file_paths'] = file_paths
+        item['file_urls'] = file_paths
         return item
 
-    def file_path(self, request, response = None, info = None):
-        print('in file_path')
-        print(request.url)
-        item = request.meta['item']
-        print(item)
-
-        #取得網址最後一個字串做為檔名
-        name = request.url.split('/')[-1]
-        print(name)
-        filename = u'full/{0}/{1}'.format(item['title'], name)
-        print(filename)
-
-        return filename
+    
