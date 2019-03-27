@@ -23,13 +23,14 @@ class PttspiderPipeline(FilesPipeline):
         return "%s/%s"%(item['title'], name)
     
     def item_completed(self, results, item, info):
-        print('in item_completed')
-        file_paths = results[0][1].get("path")
-        print(file_paths)
-        print(item)
+        file_paths = [x['path'] for ok, x in results if ok]
         if not file_paths:
             raise DropItem("Item contains no files")
         item['file_urls'] = file_paths
+        return item
+
+    def process_item(self, item, spider):
+        item.save()
         return item
 
     

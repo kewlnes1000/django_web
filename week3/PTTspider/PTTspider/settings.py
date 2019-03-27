@@ -9,6 +9,18 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+
+# init django environment
+import os, django
+import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+print(BASE_DIR)
+sys.path.append(BASE_DIR)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_web.settings")
+django.setup()
+
+
+
 BOT_NAME = 'PTTspider'
 
 SPIDER_MODULES = ['PTTspider.spiders']
@@ -68,7 +80,7 @@ ITEM_PIPELINES = {
    'PTTspider.pipelines.PttspiderPipeline': 1,
 }
 
-FILES_STORE = "D:/learning/django_web/week3/images"
+FILES_STORE = "D:/learning/django_web/templates/static/spider_images/"
 FILES_EXPIRES = "30"
 
 # Enable and configure the AutoThrottle extension (disabled by default)

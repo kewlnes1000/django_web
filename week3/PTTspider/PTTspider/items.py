@@ -6,14 +6,11 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from scrapy_djangoitem import DjangoItem
+from week3.models import PTTspider
 
 
-class PttspiderItem(scrapy.Item):
+class PttspiderItem(DjangoItem):
     # define the fields for your item here like:
-    push = scrapy.Field()
-    title = scrapy.Field()
-    author = scrapy.Field()
-    href = scrapy.Field()
-    date = scrapy.Field()
-    file_urls = scrapy.Field()
+    django_model = PTTspider
     files = scrapy.Field()

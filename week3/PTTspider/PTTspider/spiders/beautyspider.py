@@ -36,7 +36,7 @@ class BeautySpider(scrapy.Spider):
 
 
         next_page_url = response.css('div.action-bar > div.btn-group-paging > a.btn::attr("href")')[1].extract()
-        if (next_page_url) and (self.count_page < 1):
+        if (next_page_url) and (self.count_page < 5):
             self.count_page = self.count_page + 1 
             new = response.urljoin(next_page_url) 
             yield scrapy.Request(new, callback = self.parse, dont_filter = True)

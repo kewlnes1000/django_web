@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main',
     'week2',
     'rest_framework',
+    'week3',
 ]
 
 MIDDLEWARE = [
