@@ -1,0 +1,72 @@
+{% extends 'index/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+
+.photo-item{
+    height: 25vw;
+    margin: 5px;
+    display: inline-block;
+    /* *display: inline; */
+    /* *zoom: 1; */
+    vertical-align: top;
+    box-shadow: 1px 1px 3px #aaa;
+    position: relative;
+}
+.photo-info,.photo-info2{
+    position: absolute;
+    background: #000;
+    color: #fff;
+    width: 100%;
+    bottom: 0;
+    opacity: 0;
+    font-size: 3vh;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+.photo-info2 {
+    background: none;
+    list-style: none;
+    text-align: left;
+    left: 0.5vw;
+    bottom: auto;
+    color: #fff; 
+    text-shadow: black 0.1em 0.1em 0.2em
+}
+.photo-info2 ion-icon {
+    color: rgb(233, 26, 26); 
+}
+.photo-item:hover .photo-info{
+    opacity: 0.65;
+}
+.photo-item:hover .photo-info2{
+    opacity: 1;
+}
+</style>
+<div class="text-center">
+    <ul class="">
+        {% for Info in SpiderInfos %}
+            <li class="photo-item">
+                <a href="https://www.ptt.cc{{ Info.href }}">
+                    <div class="photo-info">
+                            <div class="spanhoto-title">{{ Info.title }}</div>
+                            <div class="photo-date"><ion-icon name="calendar"></ion-icon>  {{ Info.date }}</div>
+                        </div>
+                        <div class="photo-info2">
+                                <div class="photo-push"><ion-icon name="thumbs-up"></ion-icon>  {{ Info.push }}</div>
+                                <div class="photo-author"><ion-icon name="person"></ion-icon>  {{ Info.author }}</div>
+
+                    </div>
+                    <img src="{% static Info.file_urls|random %}" style="height:100%;" alt="{{ Info.title }}" srcset="">
+                    
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

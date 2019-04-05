@@ -75,7 +75,7 @@ $(document).ready(function () {
         if(text.match(/^[a-zA-Z0-9\u4e00-\u9fa5\s]+$/)){
             $.ajax({
                 type: 'POST',
-                url: '/list_add',
+                url: '/list_add/',
                 dataType:'json',
                 data: {
                     text:text,

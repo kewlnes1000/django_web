@@ -80,7 +80,7 @@ ITEM_PIPELINES = {
    'PTTspider.pipelines.PttspiderPipeline': 1,
 }
 
-FILES_STORE = "D:/learning/django_web/templates/static/spider_images/"
+FILES_STORE = "D:/learning/django_web/templates/static/"
 FILES_EXPIRES = "30"
 
 # Enable and configure the AutoThrottle extension (disabled by default)

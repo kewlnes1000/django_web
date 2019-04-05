@@ -16,21 +16,26 @@ class PttspiderPipeline(FilesPipeline):
             yield scrapy.Request(file_url, meta = {'item': item})
 
     def file_path(self, request, response = None, info = None):
+        # print('in file_path')
+
         item = request.meta['item']
         #取得網址最後一個字串做為檔名
         name = request.url.split('/')[-1]
-
-        return "%s/%s"%(item['title'], name)
+        # print("%s/%s"%(item['title'], name))
+        return "spider_images/%s/%s"%(item['title'], name)
     
     def item_completed(self, results, item, info):
+        # print('in item_completed')
         file_paths = [x['path'] for ok, x in results if ok]
         if not file_paths:
             raise DropItem("Item contains no files")
         item['file_urls'] = file_paths
-        return item
-
-    def process_item(self, item, spider):
+        # print(item['file_urls'])
         item.save()
         return item
+
+    # def process_item(self, item, spider):
+    #     item.save()
+    #     return item
 
     

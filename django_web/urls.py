@@ -15,20 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from main import views
+from main.views import index,week1,list_add,list_finsh,del_completed
 from rest_framework import routers
 from week2.views import MessagesViewSet
+from week3.views import SpiderViewSet
 
 router = routers.DefaultRouter()
 router.register(r'messages', MessagesViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
-    path('week1/', views.week1,name='week1'),
-    path('list_add/', views.list_add, name='list_add'),
-    path('list_finsh/<list_id>/', views.list_finsh, name='list_finsh'),
-    path('del_completed/', views.del_completed, name='del_completed'),
+    path('', index),
+    path('week1/', week1,name='week1'),
+    path('list_add/', list_add, name='list_add'),
+    path('list_finsh/<list_id>/', list_finsh, name='list_finsh'),
+    path('del_completed/', del_completed, name='del_completed'),
     path('week2/api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('week3/', SpiderViewSet, name='week3'),
 ]
