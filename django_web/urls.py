@@ -19,6 +19,7 @@ from main.views import index,week1,list_add,list_finsh,del_completed
 from rest_framework import routers
 from week2.views import MessagesViewSet
 from week3.views import SpiderViewSet
+from week4.views import FaceViewSet
 
 router = routers.DefaultRouter()
 router.register(r'messages', MessagesViewSet)
@@ -33,4 +34,6 @@ urlpatterns = [
     path('week2/api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('week3/', SpiderViewSet, name='week3'),
+    path('week4/', FaceViewSet, name='week4'),
+    # path('week4/', FaceViewSet, name='week4'),
 ]

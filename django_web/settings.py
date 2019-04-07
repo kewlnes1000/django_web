@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'week2',
     'rest_framework',
     'week3',
+    'week4',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/static/').replace('\\', '/')
 ]
+
+# Channels
+ASGI_APPLICATION = 'django_web.routing.application'
