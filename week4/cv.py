@@ -14,7 +14,7 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor( 'shape_predictor_68_face_landmarks.dat')
   #當攝影機打開時，對每個frame進行偵測
 while(cap.isOpened()):
-    #讀出frame資訊
+    #讀出frame資訊 nnnnn               cv 
     ret, frame = cap.read()
 
     #偵測人臉

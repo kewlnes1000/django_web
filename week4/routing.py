@@ -1,8 +1,8 @@
 # chat/routing.py
-from django.conf.urls import url
+from django.urls import include, path
 
 from . import consumers
 
 websocket_urlpatterns = [
-    url(r'^ws/week4/(?P<room_name>[^/]+)/$', consumers.ChatConsumer),
+    path('<room_name>/', consumers.ChatConsumer),
 ]

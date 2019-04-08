@@ -10,9 +10,9 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        print(text_data)
+        imgData = text_data_json['imgData']
+        # print(text_data)
 
         self.send(text_data=json.dumps({
-            'message': message
+            'imgData': imgData
         }))

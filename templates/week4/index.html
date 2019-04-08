@@ -3,43 +3,74 @@
 
 {% block content %}
 <center>
-        <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
-        <input id="chat-message-input" type="text" size="100"/><br/>
-        <input id="chat-message-submit" type="button" value="Send"/>
-    </center>
+    <h2>Streamed video:</h2>
+    <video autoplay></video>
+    <h2>Streamed canvas:</h2>
+    <canvas width="640" height="480" ></canvas>
+    <h2>Streamed image:</h2>
+    <img src="" width="640" height="480">
+</center>
+
+<script>
+var video = document.querySelector('video');
+var canvas = document.querySelector('canvas');
+var img = document.querySelector('img');
+var ctx = canvas.getContext('2d');
+var constraints = {
+    video :true,
+    audio:false
+}
+
+var roomName = {{ room_name_json }};
+var url = 'ws://' + window.location.host + '/' + roomName + '/';
+var ws = new WebSocket(url);
+var FPS = 60;
+
+ws.onopen = function (e) {
+    console.log("connected");
+}	
+
+ws.onclose = function (e) {
+    console.log("close");
+}						  
+
+navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+    video.srcObject = stream;
+    video.play()
+}).catch(function (err) {
     
-    <script>
-    var roomName = {{ room_name_json }};
-    
-    var chatSocket = new WebSocket(
-        'ws://' + window.location.host +
-        '/ws/week4/' + roomName + '/');
-    
-    chatSocket.onmessage = function(e) {
-        var data = JSON.parse(e.data);
-        var message = data['message'];
-        document.querySelector('#chat-log').value += (message + '\n');
-    };
-    
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-    };
-    
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#chat-message-submit').click();
+})
+
+setInterval(function () {
+    drawCanvas()
+    readCanvas()
+},1000 / FPS)
+
+function drawCanvas() {
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+}
+
+function readCanvas() {
+    var canvasData = canvas.toDataURL('image/jpeg',1);
+
+    ws.send(JSON.stringify({
+            'imgData': canvasData
+        }))
+
+    ws.addEventListener('message',function (e) {
+        var imgData = JSON.parse(e.data).imgData;
+        var decodeAstring = atob(imgData.split(',')[1]);
+
+        var charArray = [];
+        for (let i = 0; i < decodeAstring.length; i++) {
+            charArray.push(decodeAstring.charCodeAt(i))
         }
-    };
-    
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        var messageInputDom = document.querySelector('#chat-message-input');
-        var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
+
+        img.src = window.URL.createObjectURL( new Blob([new Uint8Array(charArray)],{
+            tpye:'image/jpeg'
         }));
-    
-        messageInputDom.value = '';
-    };
-    </script>
+    })
+}
+</script>
+
 {% endblock %}
