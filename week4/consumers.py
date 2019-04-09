@@ -1,18 +1,16 @@
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from week4.cv import FaceRecognition
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         pass
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        imgData = text_data_json['imgData']
-        # print(text_data)
-
-        self.send(text_data=json.dumps({
-            'imgData': imgData
-        }))
+    # Receive message from WebSocket
+    async def receive(self, bytes_data):
+        # print(bytes_data)
+        # Send message to room group
+        await self.send(bytes_data=bytes_data)

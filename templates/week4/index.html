@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
+
 <center>
-    <h2>Streamed video:</h2>
-    <video autoplay></video>
-    <h2>Streamed canvas:</h2>
-    <canvas width="640" height="480" ></canvas>
-    <h2>Streamed image:</h2>
-    <img src="" width="640" height="480">
+    <h2>Streamed Video</h2>
+    <video autoplay width="320" height="240"></video>
+    <canvas width="320" height="240" style="display:none;"></canvas>
+    <h2>Face Recognition</h2>
+    <img width="320" height="240">
 </center>
 
 <script>
@@ -24,7 +24,7 @@ var constraints = {
 var roomName = {{ room_name_json }};
 var url = 'ws://' + window.location.host + '/' + roomName + '/';
 var ws = new WebSocket(url);
-var FPS = 60;
+var FPS = 10;
 
 ws.onopen = function (e) {
     console.log("connected");
@@ -51,25 +51,17 @@ function drawCanvas() {
 }
 
 function readCanvas() {
-    var canvasData = canvas.toDataURL('image/jpeg',1);
+    canvas.toBlob(function (canvasData) {
+        ws.send(canvasData)        
+    });
 
-    ws.send(JSON.stringify({
-            'imgData': canvasData
-        }))
-
-    ws.addEventListener('message',function (e) {
-        var imgData = JSON.parse(e.data).imgData;
-        var decodeAstring = atob(imgData.split(',')[1]);
-
-        var charArray = [];
-        for (let i = 0; i < decodeAstring.length; i++) {
-            charArray.push(decodeAstring.charCodeAt(i))
-        }
-
-        img.src = window.URL.createObjectURL( new Blob([new Uint8Array(charArray)],{
-            tpye:'image/jpeg'
-        }));
-    })
+    ws.onmessage = function(e) {
+        var blob = e.data;
+        img.onload = function(){
+            window.URL.revokeObjectURL(img.src);
+        };
+        img.src = window.URL.createObjectURL(blob);
+    };
 }
 </script>
 
