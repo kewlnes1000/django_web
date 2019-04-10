@@ -11,6 +11,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, bytes_data):
+        face = FaceRecognition.readImage(bytes_data)
         # print(bytes_data)
         # Send message to room group
-        await self.send(bytes_data=bytes_data)
+        await self.send(bytes_data=face)
