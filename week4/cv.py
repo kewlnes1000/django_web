@@ -2,21 +2,42 @@ import numpy as np
 import dlib
 import cv2
 import base64
+import os
 
-#取得預設的臉部偵測器
-# detector = dlib.get_frontal_face_detector()
-#根據shape_predictor方法載入68個特徵點模型，此方法為人臉表情識別的偵測器
-# predictor = dlib.shape_predictor( 'shape_predictor_68_face_landmarks.dat')
+
+face_shape_path = "{base_path}\shape_predictor_68_face_landmarks.dat".format(
+	base_path=os.path.abspath(os.path.dirname(__file__)))
+
+detector = dlib.get_frontal_face_detector()
+
+predictor = dlib.shape_predictor(face_shape_path)
   
 class FaceRecognition():
+
   def readImage(blob):
-    # print(type(blob))
+    
     nparr = np.fromstring(blob, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    img_g = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    # print(type(img))
-    img_str = cv2.imencode('.jpg', img_g)[1].tostring()
-    # print(img_str)
-    return img_str
-    # img = cv2.imread(blob)
-    # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    
+    face_rects, scores, idx = detector.run(frame, 0)
+    
+    for i, d in enumerate(face_rects):
+      x1 = d.left()
+      y1 = d.top()
+      x2 = d.right()
+      y2 = d.bottom()
+      
+      cv2.rectangle(frame, (x1, y1), (x2, y2), ( 0, 0, 255), 2, cv2. LINE_AA)
+ 
+      landmarks_frame = cv2.cvtColor(frame, cv2. COLOR_BGR2RGB)
+
+      shape = predictor(landmarks_frame, d)
+ 
+      for i in range( 68):
+        cv2.circle(frame,(shape.part(i).x,shape.part(i).y), 1,( 0, 255, 255), -1)
+
+    frame_str = cv2.imencode('.jpg', frame)[1].tostring()
+    
+    return frame_str
+    

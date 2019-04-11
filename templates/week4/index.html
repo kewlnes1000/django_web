@@ -20,10 +20,12 @@ var constraints = {
     video :true,
     audio:false
 }
-
+var reader = new FileReader();
 var roomName = {{ room_name_json }};
 var url = 'ws://' + window.location.host + '/' + roomName + '/';
 var ws = new WebSocket(url);
+ws.binaryType = 'arraybuffer';
+var timer = 0;
 var FPS = 10;
 
 ws.onopen = function (e) {
@@ -51,18 +53,20 @@ function drawCanvas() {
 }
 
 function readCanvas() {
-    canvas.toBlob(function (canvasData) {
+    canvas.toBlob(function (canvasData) {        
         ws.send(canvasData)        
     });
 
     ws.onmessage = function(e) {
-        var blob = e.data;
+        var blob = e.data;        
         img.onload = function(){
             window.URL.revokeObjectURL(img.src);
         };
-        img.src = window.URL.createObjectURL(blob);
+        var str = String.fromCharCode.apply(null, new Uint8Array(blob));
+        img.src = 'data:image/jpg;base64,' + btoa(str);
     };
 }
+
 </script>
 
 {% endblock %}
