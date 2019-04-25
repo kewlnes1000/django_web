@@ -24,6 +24,7 @@ class BeautySpider(scrapy.Spider):
 
 
     def parse(self, response):
+        print(self)
         for article in response.css('div.r-ent'):
             item = PttspiderItem()
             item['href'] = article.css('div.title > a::attr("href")').extract_first()

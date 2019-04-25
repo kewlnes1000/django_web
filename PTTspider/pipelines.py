@@ -19,6 +19,7 @@ class PttspiderPipeline(FilesPipeline):
         item = request.meta['item']
         #取得網址最後一個字串做為檔名
         name = request.url.split('/')[-1]
+        print("spider_images/%s/%s"%(item['title'], name))
         return "spider_images/%s/%s"%(item['title'], name)
     
     def item_completed(self, results, item, info):
